@@ -64,7 +64,7 @@ H~2~O is是液体。
 
 ## 插入链接与图片
 
-![avatar](fightClub.png)
+![avatar](usage-of-markdown/fightClub.png)
 
 链接: [link](https://www.csdn.net/).
 
