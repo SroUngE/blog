@@ -2,7 +2,6 @@
 title: "Interview MongoDB"
 date: 2024-01-28
 draft: false
-description: "基于 ChatGPT3.5，回答常见的 MongoDB 面试题。"
 tags: ["MongoDB"]
 featuredImage: "https://s2.loli.net/2024/01/23/FdJWU6IpNZGfACv.png"
 featuredImagePreview: "https://s2.loli.net/2024/01/23/FdJWU6IpNZGfACv.png"
