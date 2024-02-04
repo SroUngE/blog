@@ -1,0 +1,18 @@
+/** Layout **/
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+
+  main {
+    flex: 1 0 auto;
+
+    .container {
+      padding: 0 1.75rem; // increase padding
+      @media only screen and (max-width: 680px) {
+        background-color: #fff; // set the backgroud as white when mobile
+      }
+    }
+  }
+}

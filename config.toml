@@ -1,0 +1,117 @@
+baseURL = "http://example.org/"
+
+# 更改使用 Hugo 构建网站时使用的默认主题
+theme = "LoveIt"
+
+# 网站标题
+title = "Rong's Blog"
+
+# 网站语言, 仅在这里 CN 大写 ["en", "zh-CN", "fr", "pl", ...]
+languageCode = "zh-CN"
+# 语言名称 ["English", "简体中文", "Français", "Polski", ...]
+languageName = "简体中文"
+# 是否包括中日韩文字
+hasCJKLanguage = true
+# 是否使用 emoji 代码
+enableEmoji = true
+
+# 作者配置
+[author]
+  name = "SroUngE"
+  email = "977683159@qq.com"
+  link = "https://srounge.github.io/"
+
+# 菜单配置
+[menu]
+  [[menu.main]]
+    weight = 1
+    identifier = "posts"
+    # 你可以在名称 (允许 HTML 格式) 之前添加其他信息, 例如图标
+    pre = '<i class="fa-solid fa-book" style="color: #2f4154;"></i>'
+    # 你可以在名称 (允许 HTML 格式) 之后添加其他信息, 例如图标
+    post = ""
+    name = "Posts"
+    url = "/posts/"
+    # 当你将鼠标悬停在此菜单链接上时, 将显示的标题
+    title = "Posts"
+  [[menu.main]]
+    weight = 2
+    identifier = "categories"
+    pre = '<i class="fa-solid fa-folder" style="color: #2f4154;"></i>'
+    post = ""
+    name = "Categories"
+    url = "/categories/"
+    title = "Categories"
+  [[menu.main]]
+    weight = 3
+    identifier = "about"
+    pre = '<i class="fa-solid fa-user" style="color: #2f4154;"></i>'
+    post = ""
+    name = "About"
+    url = "/about/"
+    title = "About"
+
+# Hugo 解析文档的配置
+[markup]
+  # 语法高亮设置 (https://gohugo.io/content-management/syntax-highlighting)
+  [markup.highlight]
+    # false 是必要的设置 (https://github.com/dillonzq/LoveIt/issues/158)
+    noClasses = false
+
+[params]
+  # 页面头部导航栏配置
+  [params.header]
+    # LoveIt 新增 | 0.2.0 页面头部导航栏标题配置
+    [params.header.title]
+      # 标题名称
+      name = "Rong's Blog"
+
+  # LoveIt 新增 | 0.2.0 List (目录或标签) 页面配置
+  [params.list]
+    # list 页面每页显示文章数量
+    paginate = 20
+
+  # 搜索配置
+  [params.search]
+    enable = true
+
+  # 主页配置
+  [params.home]
+    # LoveIt 新增 | 0.2.0 RSS 文章数目
+    rss = 10
+    # 主页个人信息
+    [params.home.profile]
+      enable = true
+      # 主页显示头像的 URL
+      avatarURL = "./avatar.jpg"
+      # LoveIt 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
+      title = "Hello, world!"
+      # 主页显示的网站副标题 (允许 HTML 格式)
+      subtitle = "One is not born, but rather becomes, a woman."
+    # 主页文章列表
+    [params.home.posts]
+      enable = true
+      # 主页每页显示文章数量
+      paginate = 10
+
+  # 作者的社交信息设置
+  [params.social]
+    GitHub = "SroUngE"
+    Email = "977683159@qq.com"
+
+  # 文章页面全局配置
+  [params.page]
+    # 是否使用 lightgallery
+    lightgallery = true
+    [params.page.toc]
+    # 是否使用目录
+    enable = true
+    # 文章页面的分享信息设置
+    [params.page.share]
+    enable = false
+    # 评论系统设置 TODO
+
+  # TypeIt 配置
+  [params.typeit]
+    # 每一步的打字速度 (单位是毫秒)
+    speed = 50 

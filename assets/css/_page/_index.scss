@@ -1,0 +1,32 @@
+.page {
+  position: relative;
+  max-width: 880px;
+  width: 60%;
+  margin: 0 auto;
+  margin-bottom: 100px;
+  padding-bottom: 100px;
+  background-color: $table-background-color;
+
+  @media only screen and (min-width: 680px) {
+    padding-left: 5%;
+    padding-right: 5%;
+    border-radius: 1.5rem;
+    box-shadow: 0 12px 50px 0 rgba(0,0,0,0.18), 0 4px 15px 0 rgba(0,0,0,0.15) !important;  
+  }
+
+  [data-header-desktop] & {
+    padding-top: var(--header-height);
+  }
+
+  [data-header-desktop=normal] & {
+    padding-top: 0;
+  }
+
+  @include blur;
+}
+
+@import "_single";
+@import "_special";
+@import "_archive";
+@import "_home";
+@import "_404";
