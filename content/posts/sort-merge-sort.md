@@ -18,13 +18,19 @@ draft: false
 
 <!--more-->
 
-## 排序
+## 思路
 
-leetcode: [912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
+归并排序的思路是，要将一个数组排序，可以先（递归地）将它分成两半分别排序，然后将结果归并起来。
 
-### 归并排序
+时间复杂度：O(nlogn)
 
-自顶向下：先分组，合并时比较大小
+空间复杂度：O(n)
+
+### 自顶向下的归并排序
+
+自顶向下的归并排序是 **分治思想** 的典型应用，将一个大问题分割成小问题分别解决。
+
+要对子数组 `nums[low ... high]` 进行排序，先将它分为 `nums[low .. mid]` 和 `nums[mid + 1, high]`两部分，分别通过递归调用将它们单独排序，最后将有序的子数组归并为最终的排序结果。
 
 ```java
 private int[] temp;
@@ -68,7 +74,11 @@ public void merge(int[] nums, int low, int mid, int high) {
 }
 ```
 
-自底向下：默认是大小为一的数组，两两归并，四四归并，...，直到最后一次归并完成
+### 自底向上的归并排序
+
+自底向上的归并排序会多次遍历整个数组，根据子数组大小进行两两归并。
+
+子数组的大小 `sz` 的初始值为1，每次加倍。两两归并，四四归并，...，直到最后一次归并完成。
 
 ```java
 private int[] temp;
@@ -95,11 +105,12 @@ public void mergeSort(int[] nums, int low, int high) {
 }
 ```
 
+自底向上的归并排序比较适合用 **链表** 组织的数据。这种方法只需要重新组织链表链接就能将链表原地排序。
 
+### 参考题目
 
-参考题目：
+[912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
 
 [88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
 
 [LCR 170. 交易逆序对的总数](https://leetcode.cn/problems/shu-zu-zhong-de-ni-xu-dui-lcof/)
-
