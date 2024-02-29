@@ -43,3 +43,38 @@ Spring的IoC容器实现了通过IoC容器管理对象的生命周期和依赖�
 3. **`org.springframework.beans.factory.config` 包：** 这个包包含了与 bean 定义和配置相关的核心功能。主要的接口是 `BeanDefinition`，它描述了 bean 的定义，包括类名、作用域、属性值等。其他与 bean 配置和定义相关的接口和类也位于这个包中，如 `ConfigurableBeanFactory`、`BeanPostProcessor` 等。
 4. **`org.springframework.context` 包：** 这个包提供了应用程序级别的上下文支持，包括应用程序事件、国际化、资源加载等。`ApplicationContext` 接口是这个包的核心，它扩展了 `BeanFactory` 接口，并提供了更多的功能，如AOP集成、事件传播、国际化等。`WebApplicationContext` 是 `ApplicationContext` 的子接口，专门用于Web应用程序。
 
+### BeanFactory 和 ApplicationContext
+
+`BeanFactory` 和 `ApplicationContext` 都是在Spring框架中用于管理和组织Bean（对象）的容器。`BeanFactory` 是 Spring 框架的基础设施，面向 Spring 本身；`ApplicationContext` 面向使用Spring 框架的开发者，几乎所有的应用场合我们都直接使用 `ApplicationContext` 而非底层的 `BeanFactory`。
+
+主要区别在于功能和特性：
+
+1. **加载时机：**
+   - `BeanFactory`是延迟加载的，只有在获取Bean时才会进行实例化。
+   - `ApplicationContext`在容器启动时就进行了实例化和初始化，提前检测和解析Bean。
+
+2. **性能：**
+   - `BeanFactory`相对较轻量，适用于资源受限的环境。
+   - `ApplicationContext`提供了更多的企业级功能，但相对而言更重量级。
+
+3. **自动装配：**
+   - `ApplicationContext`具有自动装配的特性，能够更方便地实现依赖注入。
+   - `BeanFactory`需要手动配置依赖关系。
+
+以下是几种较常见的 `ApplicationContext` 实现方式：
+
+1. `ClassPathXmlApplicationContext` ：从 classpath 的 XML 配置文件中读取上下文，并生成上下文定义。应用程序上下文从程序环境变量中
+
+   ```java
+   ApplicationContext context = new ClassPathXmlApplicationContext(“bean.xml”); 
+   ```
+
+2. `FileSystemXmlApplicationContext` ：由文件系统中的 XML 配置文件读取上下文。
+
+   ```java
+   ApplicationContext context = new FileSystemXmlApplicationContext(“bean.xml”);
+   ```
+
+3. `XmlWebApplicationContext` ：由 Web 应用的 XML 文件读取上下文。
+
+4. `AnnotationConfigApplicationContext` ：(基于 Java 配置启动容器)
