@@ -38,43 +38,51 @@ Spring框架实现依赖注入主要通过以下方式：
 
 Spring的IoC容器实现了通过IoC容器管理对象的生命周期和依赖关系，将对象的创建、初始化、销毁等控制权交给容器，使得开发者能够更专注于业务逻辑，而不必过多关注对象的创建和管理。IoC容器根据配置信息，实例化和管理bean，同时负责注入依赖关系，从而实现了控制反转。
 
-1. **`org.springframework.beans` 包：** 这个包提供了关于bean的基本功能，包括`BeanWrapper`（用于包装bean实例）、`PropertyValue`（用于封装属性值）等用于 bean 处理的基础工具类。
-2. **`org.springframework.beans.factory` 包：** 在Spring框架中，这个包扩展了`org.springframework.beans` 包，提供了关于bean工厂的更多功能。核心接口是 `BeanFactory`，定义了IoC容器的基本功能，包括获取bean、检查bean是否存在等。
-3. **`org.springframework.beans.factory.config` 包：** 这个包包含了与 bean 定义和配置相关的核心功能。主要的接口是 `BeanDefinition`，它描述了 bean 的定义，包括类名、作用域、属性值等。其他与 bean 配置和定义相关的接口和类也位于这个包中，如 `ConfigurableBeanFactory`、`BeanPostProcessor` 等。
-4. **`org.springframework.context` 包：** 这个包提供了应用程序级别的上下文支持，包括应用程序事件、国际化、资源加载等。`ApplicationContext` 接口是这个包的核心，它扩展了 `BeanFactory` 接口，并提供了更多的功能，如AOP集成、事件传播、国际化等。`WebApplicationContext` 是 `ApplicationContext` 的子接口，专门用于Web应用程序。
+1. **org.springframework.beans 包：** 这个包提供了关于bean的基本功能，包括`BeanWrapper`（用于包装bean实例）、`PropertyValue`（用于封装属性值）等用于 bean 处理的基础工具类。
+2. **org.springframework.beans.factory 包：** 在Spring框架中，这个包扩展了`org.springframework.beans` 包，提供了关于bean工厂的更多功能。核心接口是 `BeanFactory`，定义了IoC容器的基本功能，包括获取bean、检查bean是否存在等。
+3. **org.springframework.beans.factory.config 包：** 这个包包含了与 bean 定义和配置相关的核心功能。主要的接口是 `BeanDefinition`，它描述了 bean 的定义，包括类名、作用域、属性值等。其他与 bean 配置和定义相关的接口和类也位于这个包中，如 `ConfigurableBeanFactory`、`BeanPostProcessor` 等。
+4. **org.springframework.context 包：** 这个包提供了应用程序级别的上下文支持，包括应用程序事件、国际化、资源加载等。`ApplicationContext` 接口是这个包的核心，它扩展了 `BeanFactory` 接口，并提供了更多的功能，如AOP集成、事件传播、国际化等。`WebApplicationContext` 是 `ApplicationContext` 的子接口，专门用于Web应用程序。
 
 ### BeanFactory 和 ApplicationContext
 
-`BeanFactory` 和 `ApplicationContext` 都是在Spring框架中用于管理和组织Bean（对象）的容器。`BeanFactory` 是 Spring 框架的基础设施，面向 Spring 本身；`ApplicationContext` 面向使用Spring 框架的开发者，几乎所有的应用场合我们都直接使用 `ApplicationContext` 而非底层的 `BeanFactory`。
+`BeanFactory` 和 `ApplicationContext` 都是在Spring框架中用于管理和组织Bean（对象）的容器。BeanFactory 是 Spring 框架的基础设施，面向 Spring 本身；ApplicationContext 面向使用Spring 框架的开发者，几乎所有的应用场合我们都直接使用 ApplicationContext 而非底层的 BeanFactory。
 
 主要区别在于功能和特性：
 
-1. **加载时机：**
-   - `BeanFactory`是延迟加载的，只有在获取Bean时才会进行实例化。
-   - `ApplicationContext`在容器启动时就进行了实例化和初始化，提前检测和解析Bean。
+1. **加载时机：**BeanFactory 是延迟加载的，只有在获取Bean时才会进行实例化，节省内存。而ApplicationContext 在容器启动时就进行了实例化和初始化，提前检测和解析Bean。
+   
+2. **功能差异**：ApplicationContext 是 BeanFactory 的子接口，因此它继承了 BeanFactory 的所有功能，包括Bean的获取、类型判断等。但除此之外，ApplicationContext 还提供了许多 BeanFactory 没有的功能，如国际化支持、资源访问、事件传播等。这使得 ApplicationContext 更适合用于开发者的日常开发，因为它提供了更完整的框架功能。
+   
+3. **自动装配：**ApplicationContext 具有自动装配的特性，能够更方便地实现依赖注入。BeanFactory 需要手动配置依赖关系。
 
-2. **性能：**
-   - `BeanFactory`相对较轻量，适用于资源受限的环境。
-   - `ApplicationContext`提供了更多的企业级功能，但相对而言更重量级。
+以下是几种较常见的 ApplicationContext 实现方式：
 
-3. **自动装配：**
-   - `ApplicationContext`具有自动装配的特性，能够更方便地实现依赖注入。
-   - `BeanFactory`需要手动配置依赖关系。
-
-以下是几种较常见的 `ApplicationContext` 实现方式：
-
-1. `ClassPathXmlApplicationContext` ：从 classpath 的 XML 配置文件中读取上下文，并生成上下文定义。应用程序上下文从程序环境变量中
+1. **ClassPathXmlApplicationContext：**从 类路径（classpath）中加载XML配置文件，并创建相应的ApplicationContext 实例。类路径通常指的是包含项目类文件的目录，如`src/main/resources`目录下的文件。
 
    ```java
    ApplicationContext context = new ClassPathXmlApplicationContext(“bean.xml”); 
    ```
 
-2. `FileSystemXmlApplicationContext` ：由文件系统中的 XML 配置文件读取上下文。
+2. **FileSystemXmlApplicationContext：**由文件系统中的 XML 配置文件读取上下文。
 
    ```java
    ApplicationContext context = new FileSystemXmlApplicationContext(“bean.xml”);
    ```
 
-3. `XmlWebApplicationContext` ：由 Web 应用的 XML 文件读取上下文。
+3. **XmlWebApplicationContext：**用于加载Web应用程序的上下文配置文件。在Web应用中，`XmlWebApplicationContext` 通常被配置为ServletContext监听器，在Web应用启动时自动加载上下文配置文件。配置文件通常位于Web应用的`/WEB-INF`目录下。
 
-4. `AnnotationConfigApplicationContext` ：(基于 Java 配置启动容器)
+4. **AnnotationConfigApplicationContext：**用于加载基于Java注解的配置，通常包含了一个或多个`@Configuration`注解的类，并且可能还包含`@Bean`、`@ComponentScan`、`@PropertySource`等其他注解来进一步配置Spring容器。
+
+### BeanPostProcessor 和 BeanFactoryPostProcessor
+
+在Spring框架中，`BeanPostProcessor`和`BeanFactoryPostProcessor`是两个重要的接口，它们用于在Spring容器创建和初始化bean的过程中执行一些自定义的逻辑。这两个接口的主要区别在于它们处理bean的时机。
+
+1. **BeanPostProcessor**：
+   `BeanPostProcessor`接口中的方法允许你在bean的初始化前后进行定制处理。`postProcessBeforeInitialization`方法在bean的属性设置完成之后、但在bean的自定义初始化方法（如果有的话）之前被调用。`postProcessAfterInitialization`方法则在bean的自定义初始化方法之后被调用。
+
+   你可以实现这个接口来修改bean的属性、返回代理对象等。例如，Spring AOP就是通过`BeanPostProcessor`实现的，它在bean初始化后为其添加切面逻辑。
+
+2. **BeanFactoryPostProcessor**：
+   `BeanFactoryPostProcessor`接口允许你在Spring容器中的所有bean定义加载完成，但bean实例还未创建之前进行后处理。它的`postProcessBeanFactory`方法会在这个阶段被调用。
+
+   通常，`BeanFactoryPostProcessor`用于修改或添加bean定义，或者在bean定义加载之后执行一些初始化逻辑。例如，`PropertyPlaceholderConfigurer`就是一个`BeanFactoryPostProcessor`实现类，用于解析bean定义中的占位符。
