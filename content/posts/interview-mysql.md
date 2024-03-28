@@ -1,7 +1,7 @@
 ---
 title: "Interview MySQL"
 date: 2024-02-06T22:50:17+08:00
-draft: false
+draft: true
 tags: ["MySQL"]
 featuredImage: "https://s2.loli.net/2024/01/23/FdJWU6IpNZGfACv.png"
 featuredImagePreview: "https://s2.loli.net/2024/01/23/FdJWU6IpNZGfACv.png"

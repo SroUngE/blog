@@ -1,7 +1,7 @@
 ---
 title: "Interview Java Thread"
 date: 2024-02-10T23:53:56+08:00
-draft: false
+draft: true
 tags: ["Java"]
 featuredImage: "https://s2.loli.net/2024/01/23/FdJWU6IpNZGfACv.png"
 featuredImagePreview: "https://s2.loli.net/2024/01/23/FdJWU6IpNZGfACv.png"

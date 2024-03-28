@@ -1,7 +1,7 @@
 ---
 title: "Interview MongoDB"
 date: 2024-01-28
-draft: false
+draft: true
 tags: ["MongoDB"]
 featuredImage: "https://s2.loli.net/2024/01/23/FdJWU6IpNZGfACv.png"
 featuredImagePreview: "https://s2.loli.net/2024/01/23/FdJWU6IpNZGfACv.png"
@@ -16,7 +16,7 @@ MongoDB是一种开源的NoSQL数据库管理系统，它以文档为基础，�
 #### 优点：
 
 1. **灵活的数据模型：** MongoDB使用文档（BSON）存储数据，无需预定义表结构，使得数据模型更加灵活适应变化。
-2. **横向扩展：** MongoDB支持水平扩展，可以通过添加更多的节点来处理大规模数据和高并发访问。
+2. **横向扩展：** MongoDB支持水平扩展，可以通过添加更多的节点来处理大规模数据和高并发访问。这个是重点。
 3. **丰富的查询语言：** 支持复杂的查询和聚合操作，提供强大的查询功能。
 4. **自动分片：** MongoDB能够自动将数据分片存储，提高数据的分布和访问效率。
 5. **可靠性和可用性**：MongoDB允许创建数据的副本（复制集），这些副本可以分布在不同的服务器上。如果一个服务器出现故障，系统可以自动将工作切换到其他副本，确保数据的可靠性和服务的可用性。

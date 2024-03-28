@@ -1,7 +1,7 @@
 ---
 title: "Interview Database"
 date: 2024-02-01
-draft: false
+draft: true
 description: "基于 ChatGPT3.5，回答常见的数据库面试题。"
 tags: ["Database"]
 featuredImage: "https://s2.loli.net/2024/01/23/FdJWU6IpNZGfACv.png"
