@@ -170,6 +170,126 @@ Redis 每个 Key 都会设置一个过期时间（TTL，Time To Live），主要
 
 
 
+### Redis 实现 限流
+
+从简单到复杂，有三种方案：
+
+1. setnx 实现固定窗口算法；
+2. zset 实现滑动窗口算法；
+3. list 实现令牌桶算法；
+
+#### 使用SETNX（SET if Not Exists）实现固定窗口限流
+
+**整体思路**：
+
+1. 使用Redis的SETNX命令尝试设置一个具有过期时间的key。
+2. 如果SETNX命令返回1（表示设置成功），则说明这是该时间窗口内的第一个请求，允许该请求。
+3. 如果SETNX命令返回0（表示key已存在），则检查键的时间戳是否在窗口内，如果在窗口内，表示可以通过，否则不通过。
+
+**基于Jedis的实现**：
+
+```java
+public class FixedWindowRateLimiter {
+    private final Jedis jedis;
+    private final String keyPrefix;
+    private final int windowSizeInSeconds;
+
+    public FixedWindowRateLimiter(Jedis jedis, String keyPrefix, int windowSizeInSeconds) {
+        this.jedis = jedis;
+        this.keyPrefix = keyPrefix;
+        this.windowSizeInSeconds = windowSizeInSeconds;
+    }
+
+    /**
+     * 1. 使用Redis的SETNX命令尝试设置一个具有过期时间的key。
+     * 2. 如果SETNX命令返回1（表示设置成功），则说明这是该时间窗口内的第一个请求，允许该请求。
+     * 3. 如果SETNX命令返回0（表示key已存在），则检查键的时间戳是否在窗口内，如果在窗口内，表示可以通过，否则不通过。
+     */
+    public boolean allowRequest(String identifier) {
+        String key = keyPrefix + identifier;
+        long currentTime = System.currentTimeMillis() / 1000;
+
+        // Try to set the key if it doesn't exist
+        long result = jedis.setnx(key, String.valueOf(currentTime));
+
+        // If result is 1, it means the key was successfully set, and the request is allowed
+        if (result == 1) {
+            jedis.expire(key, windowSizeInSeconds); // Set expiration time
+            return true;
+        }
+
+        // If result is 0, it means the key already exists
+        // Check if the difference between current time and key's timestamp is less than window size
+        String value = jedis.get(key);
+        if (value != null) {
+            long timestamp = Long.parseLong(value);
+            if (currentTime - timestamp < windowSizeInSeconds) {
+                return true;
+            }
+        }
+
+        // If key doesn't exist or the difference is larger than window size, deny the request
+        return false;
+    }
+}
+```
+
+
+
+#### 使用ZSET（Sorted Set）实现滑动窗口限流
+
+**整体思路**：
+
+1. 使用 ZADD 命令将当前时间戳作为分数，请求标识作为成员添加到有序集合中。
+2. 使用 ZREMRANGEBYSCORE 命令移除时间窗口之外的成员。
+3. 检查有序集合中的成员数量是否超过限流阈值。
+
+**基于Jedis的实现**：
+
+```java
+public class SlidingWindowRateLimiter {
+    private final Jedis jedis;
+    private final String keyPrefix;
+    private final int windowSizeInSeconds;
+    private final int maxRequests;
+
+    public SlidingWindowRateLimiter(Jedis jedis, String keyPrefix, int windowSizeInSeconds, int maxRequests) {
+        this.jedis = jedis;
+        this.keyPrefix = keyPrefix;
+        this.windowSizeInSeconds = windowSizeInSeconds;
+        this.maxRequests = maxRequests;
+    }
+
+    public boolean allowRequest(String identifier) {
+        String key = keyPrefix + identifier;
+        long currentTime = System.currentTimeMillis() / 1000;
+
+        // Remove old entries from the sorted set
+        long windowStart = currentTime - windowSizeInSeconds;
+        jedis.zremrangeByScore(key, "-inf", String.valueOf(windowStart));
+
+        // Count the number of requests in the window
+        List<Tuple> window = jedis.zrangeWithScores(key, 0, -1);
+        int requestsInWindow = window.size();
+
+        // If the number of requests exceeds the maximum allowed, deny the request
+        // Or, add current request timestamp to the sorted set
+        if (requestsInWindow < maxRequests) {
+            jedis.zadd(key, currentTime, String.valueOf(currentTime));
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+```
+
+
+
+
+
+
+
 ### Redis 实现分布式锁
 
 分布式锁是一种跨进程的、跨机器节点的互斥锁，其目标是在分布式系统中实现互斥访问共享资源的能力，以避免多个进程或线程同时修改相同的数据。它主要具有以下几个特性：

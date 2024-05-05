@@ -246,6 +246,7 @@ Java 中确保线程安全有几种方式：
 10. **偏向锁（Biased Locking）：** 当只有一个线程访问同步块时，为该线程获取锁而不涉及竞争。如 `synchronized`
 11. **轻量级锁（Lightweight Lock）：** 针对多线程竞争不激烈的场景，通过CAS（比较并交换）来减小锁的开销。如 `synchronized`
 12. **重量级锁（Heavyweight Lock）：** 针对多线程竞争激烈的场景，采用传统的互斥方式，可能涉及线程的阻塞和唤醒。如 `synchronized`
+13. **可中断锁（Interruptible Lock）：**等待获取锁的过程中被中断。如果在这个线程等待锁的过程中，其他线程调用了它的`interrupt()`方法，那么这个线程将会收到一个中断信号。此时，`lockInterruptibly()`方法会立即抛出一个`InterruptedException`，并停止等待锁。如 `Lock` 接口，Java的内置锁（即`synchronized`关键字）是不可中断的
 
 锁的开销相对较大，而CAS（比较并交换）的开销相对较小的主要原因是它们在实现同步时采用了不同的策略。
 
