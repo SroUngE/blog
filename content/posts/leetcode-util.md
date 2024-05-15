@@ -1,5 +1,5 @@
 ---
-​title: "Leetcode 工具类 构造输入"
+title: "Leetcode 工具类 构造输入"
 date: 2024-05-12
 tags: ["Java", "Algorithm"]
 featuredImage: "https://s2.loli.net/2024/05/12/9jKdXJ8WaEq4it6.png"
@@ -7,9 +7,9 @@ featuredImagePreview: "https://s2.loli.net/2024/05/12/9jKdXJ8WaEq4it6.png"
 draft: false
 ---
 
-
-
 <!--more-->
+
+### 代码
 
 > 用于复制 Leetcode 的输入字符串，构造对应的数据结构
 
@@ -43,7 +43,7 @@ public class LeetCodeUtil {
     static int[][] new2DIntArray(String str) {
         str = format(str);
         if (str.isEmpty()) return new int[0][];
-        String[] parts = str.split("],");
+        String[] parts = str.replace("],", "]%%").split("%%");
         int[][] result = new int[parts.length][];
         for (int i = 0; i < parts.length; i++) {
             result[i] = newIntArray(parts[i]);
